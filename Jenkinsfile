@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent { label 'k8s-agent' }
 
     environment {
         IMAGE_NAME = "your-dockerhub-username/sample-flask-app"
