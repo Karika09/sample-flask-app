@@ -1,39 +1,54 @@
 pipeline {
-  agent {
-    kubernetes {
-      label 'k8s-agent'
-      defaultContainer 'jnlp'
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "your-dockerhub-username/sampleapp"
+        DOCKER_CREDENTIALS_ID = "dockerhub-creds"
+        KUBE_CONTEXT = "sampleapp.k8s.local"
     }
-  }
 
     stages {
-        stage('Clone') {
+        stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/Karika09/sample-flask-app.git', branch: 'main'
-
+                git url: 'https://github.com/your-username/your-repo.git', branch: 'main'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                script {
+                    docker.build(DOCKER_IMAGE)
+                }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker push $IMAGE_NAME'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                        docker.image(DOCKER_IMAGE).push("latest")
+                    }
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
+                sh '''
+                kubectl config use-context ${KUBE_CONTEXT}
+                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f k8s/service.yaml
+                '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed!'
         }
     }
 }
