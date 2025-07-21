@@ -1,9 +1,10 @@
 pipeline {
-    agent { label 'k8s-agent' }
-
-    environment {
-        IMAGE_NAME = "your-dockerhub-username/sample-flask-app"
+  agent {
+    kubernetes {
+      label 'k8s-agent'
+      defaultContainer 'jnlp'
     }
+  }
 
     stages {
         stage('Clone') {
