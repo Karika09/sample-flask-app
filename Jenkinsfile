@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "iamsarika/sampleapp"
         DOCKER_CREDENTIALS_ID = "dockerhub-creds"
-        KUBE_CONTEXT = "myapplication.k8s.local"
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
 
     stages {
