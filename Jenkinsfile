@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                kubectl config use-context ${KUBE_CONTEXT}
+                kubectl config use-context myapplication.k8s.local
                 kubectl apply -f k8s/deployment.yaml
                 kubectl apply -f k8s/service.yaml
                 '''
