@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/Karika09/sample-flask-app.git', branch: 'main' credentialsId: 'github-token'
+                git url: 'https://github.com/Karika09/sample-flask-app.git', branch: 'main' 
             }
         }
 
