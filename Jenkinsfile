@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "sarikasan94/sampleapp"
+        DOCKER_IMAGE = "iamsarika/sampleapp"
         DOCKER_CREDENTIALS_ID = "dockerhub-creds"
         KUBE_CONTEXT = "myapplication.k8s.local"
     }
@@ -26,7 +26,7 @@ pipeline {
     steps {
         script {
             docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-                def image = docker.image('sarikasan94/sampleapp')
+                def image = docker.image('iamsarika/sampleapp')
                 image.push('latest')
             }
         }
