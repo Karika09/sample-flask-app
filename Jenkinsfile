@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "your-dockerhub-username/sampleapp"
+        DOCKER_IMAGE = "sarikasan94/sampleapp"
         DOCKER_CREDENTIALS_ID = "dockerhub-creds"
-        KUBE_CONTEXT = "sampleapp.k8s.local"
+        KUBE_CONTEXT = "myapplication.k8s.local"
     }
 
     stages {
